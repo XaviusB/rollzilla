@@ -24,6 +24,22 @@ export function getNumberTexture(value: number, textColor = '#1b1b1f'): THREE.Te
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(String(value), size / 2, size / 2 + 4);
+
+    // A bare "6" and "9" are indistinguishable once rotated 180°, since a die
+    // can land with a face twisted to any angle. Underline the digit "6"
+    // (matching the common physical-dice convention) so the underline —
+    // fixed relative to the glyph — always reveals which one it actually is,
+    // no matter how the face is oriented when it settles.
+    if (value === 6) {
+      const underlineY = size / 2 + 30;
+      const underlineHalfWidth = 16;
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = textColor;
+      ctx.beginPath();
+      ctx.moveTo(size / 2 - underlineHalfWidth, underlineY);
+      ctx.lineTo(size / 2 + underlineHalfWidth, underlineY);
+      ctx.stroke();
+    }
   }
 
   const texture = new THREE.CanvasTexture(canvas);
